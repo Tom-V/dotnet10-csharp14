@@ -1,4 +1,4 @@
 <Solution>
-  <Project Path="../../source/repos/dotnetfeatures/dotnetfeatures.csproj" />
+  <Project Path="dotnetfeatures\dotnetfeatures.csproj" />
   <Project Path="csharp14/csharp14.csproj" />
 </Solution>

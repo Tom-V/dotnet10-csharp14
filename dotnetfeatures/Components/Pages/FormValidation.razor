@@ -1,0 +1,187 @@
+﻿@page "/formvalidation"
+@rendermode InteractiveServer
+@using dotnetfeatures.Models
+@using System.ComponentModel.DataAnnotations
+@using System.Linq.Expressions
+
+<h3>Improved Form Validation Demo (.NET10 nested/collection validation)</h3>
+<p>Demonstrates AddValidation, [ValidatableType], nested object + collection validation, SkipValidation, and dynamic item editing.</p>
+
+<EditForm EditContext="@_editContext" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <fieldset class="border p-3 mb-3">
+        <legend>Account</legend>
+        <div class="mb-3">
+            <label class="form-label">User name</label>
+            <InputText @bind-Value="Model.UserName" class="@GetInputClass(() => Model.UserName)" />
+            <ValidationMessage For="@(() => Model.UserName)" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <InputText @bind-Value="Model.Email" class="@GetInputClass(() => Model.Email)" />
+            <ValidationMessage For="@(() => Model.Email)" />
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Password</label>
+                <InputText @bind-Value="Model.Password" type="password" class="@GetInputClass(() => Model.Password)" />
+                <ValidationMessage For="@(() => Model.Password)" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Confirm Password</label>
+                <InputText @bind-Value="Model.ConfirmPassword" type="password" class="@GetInputClass(() => Model.ConfirmPassword)" />
+                <ValidationMessage For="@(() => Model.ConfirmPassword)" />
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Age</label>
+            <InputNumber @bind-Value="Model.Age" class="@GetInputClass(() => Model.Age)" />
+            <ValidationMessage For="@(() => Model.Age)" />
+        </div>
+    </fieldset>
+
+    <fieldset class="border p-3 mb-3">
+        <legend>Address</legend>
+        <div class="mb-3">
+            <label class="form-label">Street</label>
+            <InputText @bind-Value="Model.Address.Street" class="@GetInputClass(() => Model.Address.Street)" />
+            <ValidationMessage For="@(() => Model.Address.Street)" />
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">City</label>
+                <InputText @bind-Value="Model.Address.City" class="@GetInputClass(() => Model.Address.City)" />
+                <ValidationMessage For="@(() => Model.Address.City)" />
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">State</label>
+                <InputText @bind-Value="Model.Address.State" class="@GetInputClass(() => Model.Address.State)" />
+                <ValidationMessage For="@(() => Model.Address.State)" />
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Postal Code</label>
+                <InputText @bind-Value="Model.Address.PostalCode" class="@GetInputClass(() => Model.Address.PostalCode)" />
+                <ValidationMessage For="@(() => Model.Address.PostalCode)" />
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="border p-3 mb-3">
+        <legend>Phone Numbers (collection)</legend>
+        @if (Model.Phones.Count == 0)
+        {
+            <p class="text-muted">No phone numbers added.</p>
+        }
+        <div class="mb-2">
+            <button type="button" class="btn btn-sm btn-outline-success" @onclick="AddPhone">Add Phone</button>
+        </div>
+        @for (int i = 0; i < Model.Phones.Count; i++)
+        {
+            var index = i; // capture
+                           <div class="row align-items-end mb-2" key="phone-@index">
+                               <div class="col-md-6">
+                                   <label class="form-label">Number</label>
+                                   <InputText @bind-Value="Model.Phones[index].Number" class="@GetInputClass(() => Model.Phones[index].Number)" />
+                                   <ValidationMessage For="@(() => Model.Phones[index].Number)" />
+                               </div>
+                               <div class="col-md-4">
+                                   <label class="form-label">Type</label>
+                                   <InputText @bind-Value="Model.Phones[index].Type" class="@GetInputClass(() => Model.Phones[index].Type)" />
+                                   <ValidationMessage For="@(() => Model.Phones[index].Type)" />
+                               </div>
+                               <div class="col-md-2 text-end">
+                                   <button type="button" class="btn btn-sm btn-outline-danger mt-4" @onclick="() => RemovePhone(index)">Remove</button>
+                               </div>
+                           </div>
+        }
+    </fieldset>
+
+    <button type="submit" class="btn btn-primary" disabled="@(!_isValid)">Register</button>
+    <button type="button" class="btn btn-secondary ms-2" @onclick="ResetForm">Reset</button>
+    <InputHidden id="hidden" @bind-Value="Parameter" />
+</EditForm>
+
+@if (_submitted != null)
+{
+    <div class="alert alert-success mt-3">Last successful submit: @_submitted.UserName (@_submitted.Email) Phones: @_submitted.Phones.Count</div>
+}
+
+@code {
+    [SupplyParameterFromForm]
+    public string Parameter { get; set; } = Guid.NewGuid().ToString();
+    private RegistrationModel Model = new();
+    private RegistrationModel? _submitted;
+    private EditContext _editContext = default!;
+    private bool _isValid;
+
+    protected override void OnInitialized()
+    {
+        _editContext = new EditContext(Model);
+        _editContext.OnFieldChanged += (_, __) => Revalidate();
+        Revalidate();
+    }
+
+    private void Revalidate()
+    {
+        _editContext.Validate();
+        _isValid = !_editContext.GetValidationMessages().Any();
+        StateHasChanged();
+    }
+
+    private void HandleValidSubmit()
+    {
+        _submitted = new RegistrationModel
+        {
+            UserName = Model.UserName,
+            Email = Model.Email,
+            Password = Model.Password,
+            ConfirmPassword = Model.ConfirmPassword,
+            Age = Model.Age,
+            Address = new Address
+            {
+                Street = Model.Address.Street,
+                City = Model.Address.City,
+                State = Model.Address.State,
+                PostalCode = Model.Address.PostalCode
+            },
+            Phones = Model.Phones.Select(p => new PhoneEntry { Number = p.Number, Type = p.Type }).ToList()
+        };
+        ResetModelRetainEditContext();
+    }
+
+    private void ResetForm() => ResetModelRetainEditContext();
+
+    private void ResetModelRetainEditContext()
+    {
+        Model = new RegistrationModel();
+        _editContext = new EditContext(Model);
+        _editContext.OnFieldChanged += (_, __) => Revalidate();
+        Revalidate();
+    }
+
+    private void AddPhone()
+    {
+        Model.Phones.Add(new PhoneEntry());
+        _editContext.NotifyFieldChanged(new FieldIdentifier(Model, nameof(Model.Phones)));
+        Revalidate();
+    }
+
+    private void RemovePhone(int index)
+    {
+        if (index >= 0 && index < Model.Phones.Count)
+        {
+            Model.Phones.RemoveAt(index);
+            _editContext.NotifyFieldChanged(new FieldIdentifier(Model, nameof(Model.Phones)));
+            Revalidate();
+        }
+    }
+
+    private string GetInputClass<T>(Expression<Func<T>> accessor)
+    {
+        var field = FieldIdentifier.Create(accessor);
+        var hasErrors = _editContext.GetValidationMessages(field).Any();
+        var isModified = _editContext.IsModified(field);
+        return $"form-control {(hasErrors ? "is-invalid" : isModified ? "is-valid" : string.Empty)}";
+    }
+}

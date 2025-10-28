@@ -1,0 +1,36 @@
+@page "/userstate"
+@inject CustomUserService UserService
+
+<PageTitle>User State Persistence</PageTitle>
+
+<h3>User State Persistence Demo</h3>
+
+@if (string.IsNullOrEmpty(UserService.UserName))
+{
+ <p>No user name stored yet. Enter one below.</p>
+}
+else
+{
+ <p>Stored user name: <strong>@UserService.UserName</strong></p>
+}
+<p>Hit count (increments each interaction/circuit init): <strong>@UserService.HitCount</strong></p>
+
+<input @bind="_name" placeholder="Enter user name" />
+<button @onclick="Increment">Increment Hit</button>
+
+@code {
+ private string? _name;
+
+ protected override void OnInitialized()
+ {
+ // Increment whenever the circuit (re)initializes to show persistence across reconnects.
+ _name = UserService.UserName;
+ }
+
+ 
+
+ private void Increment()
+ {
+ UserService.HitCount++;
+ }
+}

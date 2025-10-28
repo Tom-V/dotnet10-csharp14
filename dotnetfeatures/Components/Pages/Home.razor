@@ -1,0 +1,35 @@
+﻿@page "/"
+@using Microsoft.Extensions.Caching.Memory
+@rendermode InteractiveServer
+@inject NavigationManager Nav
+@inject IJSRuntime JS
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<p>Welcome to your new app. Scroll down to a deep position, then navigate away and back here. Manual scroll restore logic keeps your position when returning unless you force scroll via the buttons below.</p>
+
+
+
+<div>
+ <h2>Long Content Section</h2>
+ @for (int i =1; i <=120; i++)
+ {
+ <p><strong>Paragraph @i:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vitae ligula euismod, bibendum nisl sed, laoreet arcu. Integer consequat, tortor nec varius aliquet, neque nunc vehicula risus, vitae interdum nunc purus sed nisl. Quisque id magna non erat tincidunt dictum. Suspendisse potenti. Proin sagittis purus sed orci hendrerit, nec efficitur nisl suscipit. Cras vitae turpis a sapien dignissim fermentum. Sed a tincidunt est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam lacinia, massa vitae porttitor ullamcorper, risus dolor volutpat libero, a accumsan nulla dolor sit amet justo. Curabitur dictum, nibh a molestie venenatis, magna lacus finibus justo, vitae convallis ante metus vitae enim. Vivamus eget condimentum nisl. Donec consequat semper magna, a convallis ipsum euismod non.</p>
+ }
+</div>
+
+<div class="mb-5">
+ <h2>Footer Area</h2>
+ <p>Reached the bottom. Navigate away and back here to observe scroll behavior.</p>
+</div>
+<button @onclick="Navigate">Navigeer naar home</button>
+@code {
+    private void Navigate()
+    {
+        Nav.NavigateTo("/");
+    }
+}
+
+

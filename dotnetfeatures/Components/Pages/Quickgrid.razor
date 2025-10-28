@@ -1,0 +1,175 @@
+﻿@page "/grid"
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.QuickGrid
+
+<PageTitle>Customers Grid</PageTitle>
+
+<style>
+        .row-archived {
+        background-color: #f8f9fa;
+    color: #6c757d;
+            font-style: italic;
+        }
+
+        .row-priority {
+    background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+     font-weight: 600;
+      }
+
+        .row-featured {
+          background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .row-recent {
+     background-color: #d4edda;
+          border-left: 4px solid #28a745;
+        }
+
+        .row-enterprise {
+            background-color: #e2e3e5;
+            border-left: 4px solid #6c757d;
+       font-weight: 500;
+        }
+
+        .row-even {
+        background-color: #f8f9fa;
+        }
+
+      .row-odd {
+            background-color: #ffffff;
+        }
+
+        /* Hover effects */
+        .table tbody tr:hover {
+            background-color: #e9ecef !important;
+            transition: background-color 0.15s ease-in-out;
+        }
+
+        /* Priority rows take precedence over alternating colors */
+        .row-priority.row-even,
+        .row-priority.row-odd {
+     background-color: #fff3cd;
+        }
+
+      /* Featured rows take precedence over alternating colors */
+        .row-featured.row-even,
+        .row-featured.row-odd {
+            background-color: #d1ecf1;
+        }
+
+      /* Recent rows take precedence over alternating colors */
+        .row-recent.row-even,
+        .row-recent.row-odd {
+            background-color: #d4edda;
+        }
+
+        /* Enterprise rows take precedence over alternating colors */
+        .row-enterprise.row-even,
+        .row-enterprise.row-odd {
+       background-color: #e2e3e5;
+        }
+
+        /* Column options styling */
+        .column-options {
+            padding: 8px;
+            background-color: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+        }
+
+        .column-options input {
+            width: 100%;
+            padding: 4px 8px;
+          border: 1px solid #ced4da;
+            border-radius: 4px;
+         font-size: 0.875rem;
+        }
+</style>
+
+<h1>Customers Grid</h1>
+
+<div class="mb-3">
+    <label class="form-label">Show/Hide Columns:</label>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" @bind="showIdColumn" id="showId" />
+        <label class="form-check-label" for="showId">ID</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" @bind="showNameColumn" id="showName" />
+        <label class="form-check-label" for="showName">Customer Name</label>
+    </div>
+</div>
+
+<QuickGrid @ref="customerGrid" TGridItem="Customers" Items="filteredCustomers" class="table" RowClass="GetRowCssClass">
+    @if (showIdColumn)
+    {
+        <PropertyColumn Property="@(c => c.Id)" Title="ID" Sortable="true" />
+    }
+
+    @if (showNameColumn)
+    {
+        <PropertyColumn Property="@(c => c.Name)" Title="Customer Name" Sortable="true">
+            <ColumnOptions>
+                <input type="search" @bind="nameFilter" placeholder="Filter by customer name"
+                       @bind:after="@(() => customerGrid!.RefreshDataAsync())" />
+            </ColumnOptions>
+        </PropertyColumn>
+    }
+</QuickGrid>
+
+@code {
+    private QuickGrid<Customers>? customerGrid;
+    private string nameFilter = string.Empty;
+    private bool showIdColumn = true;
+    private bool showNameColumn = true;
+
+    private IQueryable<Customers> customers = new List<Customers>
+    {
+ new() { Id = 1, Name = "Contoso Corporation" },
+        new() { Id = 2, Name = "Fabrikam Inc." },
+  new() { Id = 3, Name = "Adventure Works" },
+      new() { Id = 4, Name = "Northwind Traders" },
+      new() { Id = 5, Name = "Wide World Importers" },
+     new() { Id = 6, Name = "Tailspin Toys" },
+        new() { Id = 7, Name = "Fourth Coffee" },
+        new() { Id = 8, Name = "Litware Inc." },
+      new() { Id = 9, Name = "Blue Yonder Airlines" },
+        new() { Id = 10, Name = "Coho Vineyard" }
+    }.AsQueryable();
+
+    private IQueryable<Customers> filteredCustomers =>
+      customers.Where(c => string.IsNullOrEmpty(nameFilter) ||
+  c.Name.Contains(nameFilter, StringComparison.OrdinalIgnoreCase));
+
+    private string GetRowCssClass(Customers item)
+    {
+        var cssClasses = new List<string>();
+
+        // Archive status based on name containing 'a'
+        if (item.Name.Contains("a", StringComparison.OrdinalIgnoreCase))
+            cssClasses.Add("row-archived");
+
+        // Priority customers (specific companies)
+        if (item.Name.Contains("Contoso") || item.Name.Contains("Fabrikam"))
+            cssClasses.Add("row-priority");
+
+        // Special styling for certain ID ranges
+        if (item.Id <= 3)
+            cssClasses.Add("row-featured");
+        else if (item.Id >= 8)
+            cssClasses.Add("row-recent");
+
+        // Highlight rows with longer names
+        if (item.Name.Length > 15)
+            cssClasses.Add("row-enterprise");
+
+        // Apply alternating row colors for better readability
+        if (item.Id % 2 == 0)
+            cssClasses.Add("row-even");
+        else
+            cssClasses.Add("row-odd");
+
+        return cssClasses.Count > 0 ? string.Join(" ", cssClasses) : string.Empty;
+    }
+}
