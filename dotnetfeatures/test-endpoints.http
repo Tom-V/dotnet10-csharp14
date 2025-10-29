@@ -1,0 +1,155 @@
+@hostname = localhost
+@port = 7037
+@baseUrl = https://{{hostname}}:{{port}}
+
+### .NET 10 Minimal API Examples
+### Test the empty string to null conversion and validation features
+
+### 1. Test Todo endpoint with form data (empty string to null conversion)
+POST {{baseUrl}}/todo
+Content-Type: application/x-www-form-urlencoded
+
+Id=1&DueDate=&Title=Learn .NET 10&IsCompleted=false
+
+###
+
+### 2. Test Todo endpoint with valid date
+POST {{baseUrl}}/todo
+Content-Type: application/x-www-form-urlencoded
+
+Id=2&DueDate=2024-12-31&Title=Complete project&IsCompleted=true
+
+###
+
+### 3. Test Product validation - Valid product
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Laptop",
+  "quantity": 5
+}
+
+###
+
+### 4. Test Product validation - Invalid product (missing name) - CUSTOM ERROR RESPONSE
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "quantity": 10
+}
+
+###
+
+### 5. Test Product validation - Invalid quantity (out of range) - CUSTOM ERROR RESPONSE
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Phone",
+  "quantity": 2000
+}
+
+###
+
+### 6. Test Product validation - Invalid quantity (negative) - CUSTOM ERROR RESPONSE
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Tablet",
+  "quantity": -1
+}
+
+###
+
+### 7. Test Product validation - Boundary values
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Keyboard",
+  "quantity": 1
+}
+
+###
+
+### 8. Test Product validation - Maximum boundary
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Mouse",
+  "quantity": 1000
+}
+
+###
+
+### 9. Test Server-Sent Events (.NET 10 feature) - Heart Rate Stream
+GET {{baseUrl}}/json-item
+Accept: text/event-stream
+
+###
+
+### 10. Test Custom Problem Details - Valid User Registration
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "age": 30,
+  "username": "johndoe123"
+}
+
+###
+
+### 11. Test Custom Problem Details - Multiple Validation Errors
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": "invalid-email",
+  "age": 15,
+  "username": "jo"
+}
+
+###
+
+### 12. Test Custom Problem Details - Missing Required Fields
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "age": 25
+}
+
+###
+
+### 13. Test Custom Problem Details - Invalid Age Range
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Jane Smith",
+  "email": "jane@example.com",
+  "age": 150,
+  "username": "janesmith"
+}
+
+###
+
+### 14. Test Custom Problem Details - Username Too Short
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Bob Wilson",
+  "email": "bob@example.com",
+  "age": 28,
+  "username": "bob"
+}
+
+###
