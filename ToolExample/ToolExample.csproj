@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<LangVersion>10.0</LangVersion>
+		<TargetFramework>net9.0</TargetFramework>
+		<RuntimeIdentifiers>linux-x64;linux-arm64;win-x64;win-arm64;</RuntimeIdentifiers>
+		<PublishSelfContained>true</PublishSelfContained>
+		<PublishTrimmed>true</PublishTrimmed>
+		<!-- 👇 Add these -->
+		<PublishAot>true</PublishAot>
+		<StripSymbols>true</StripSymbols>
+
+
+		<!--<TargetFramework>net9.0</TargetFramework>
+		<RuntimeIdentifiers>linux-x64;linux-arm64;win-x64;win-arm64</RuntimeIdentifiers>
+		<PublishSelfContained>true</PublishSelfContained>
+		-->
+		<!-- 👇 Add this -->
+		<!--
+		<PublishTrimmed>true</PublishTrimmed>-->
+		<!--<TargetFramework>net9.0</TargetFramework>
+		<RuntimeIdentifiers>linux-x64;linux-arm64;win-x64;win-arm64</RuntimeIdentifiers>
+		<PublishSelfContained>true</PublishSelfContained>-->
+		<!--<RuntimeIdentifiers>linux-x64;linux-arm64;win-x64;win-arm64;any</RuntimeIdentifiers>
+		<PublishSelfContained>false</PublishSelfContained>
+		<TargetFrameworks>netcoreapp3.1;net5.0;net6.0;net7.0;net8.0;net9.0</TargetFrameworks>-->
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>sayhello</ToolCommandName>
+		<PackageId>sayhello</PackageId>
+		<PackageVersion>1.0.0</PackageVersion>
+		<Authors>Andrew Lock</Authors>
+		<Description>A tool that says hello</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Spectre.Console" Version="0.50.0" />
+		<PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.8" />
+	</ItemGroup>
+</Project>
