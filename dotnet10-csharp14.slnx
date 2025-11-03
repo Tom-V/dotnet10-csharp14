@@ -3,4 +3,5 @@
   <Project Path="dotnetfeatures\dotnetfeatures.csproj" />
   <Project Path="TestProject/TestProject.csproj" Id="9d0ddd0d-68ab-4743-b4c2-e3514a069616" />
   <Project Path="ToolExample/ToolExample.csproj" Id="65255ebe-6143-4a2d-9183-fb2e030bb8af" />
+  <Project Path="benchmarks/benchmarks.csproj"  />
 </Solution>
