@@ -1,4 +1,6 @@
-﻿//#define FIELD_KEYWORD
+﻿Console.WriteLine("hello world");
+
+//#define FIELD_KEYWORD
 //#define GENERIC_NAMEOF
 //#define LAMBDA_MODIFIERS
 

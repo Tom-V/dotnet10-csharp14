@@ -5,6 +5,7 @@
 		<Nullable>enable</Nullable>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>TestProject</RootNamespace>
+		<LangVersion>Preview</LangVersion>
 		<TargetFramework>net10.0</TargetFramework>
 		<UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
 		<!--

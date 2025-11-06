@@ -37,7 +37,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Spectre.Console" Version="0.50.0" />
-		<PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.8" />
+		<PackageReference Include="Spectre.Console" Version="0.53.0" />
+		<PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.10" />
 	</ItemGroup>
 </Project>
