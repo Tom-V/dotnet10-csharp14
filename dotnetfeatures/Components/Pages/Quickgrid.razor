@@ -1,7 +1,7 @@
 ﻿@page "/grid"
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.QuickGrid
-
+@rendermode InteractiveServer
 <PageTitle>Customers Grid</PageTitle>
 
 <style>
@@ -87,19 +87,7 @@
         }
 </style>
 
-<h1>Customers Grid</h1>
 
-<div class="mb-3">
-    <label class="form-label">Show/Hide Columns:</label>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" @bind="showIdColumn" id="showId" />
-        <label class="form-check-label" for="showId">ID</label>
-    </div>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" @bind="showNameColumn" id="showName" />
-        <label class="form-check-label" for="showName">Customer Name</label>
-    </div>
-</div>
 
 <QuickGrid @ref="customerGrid" TGridItem="Customers" Items="filteredCustomers" class="table" RowClass="GetRowCssClass">
     @if (showIdColumn)
@@ -112,7 +100,7 @@
         <PropertyColumn Property="@(c => c.Name)" Title="Customer Name" Sortable="true">
             <ColumnOptions>
                 <input type="search" @bind="nameFilter" placeholder="Filter by customer name"
-                       @bind:after="@(() => customerGrid!.RefreshDataAsync())" />
+                       @bind:after="@(() => customerGrid!.HideColumnOptionsAsync())" />
             </ColumnOptions>
         </PropertyColumn>
     }
