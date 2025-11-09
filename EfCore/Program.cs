@@ -7,12 +7,12 @@ Console.WriteLine("=== EF Core 10 Features Demonstration ===\n");
 using var context = new AppDbContext();
 
 // Ensure database is created
-await context.Database.EnsureDeletedAsync();
-await context.Database.EnsureCreatedAsync();
+//await context.Database.EnsureDeletedAsync();
+//await context.Database.EnsureCreatedAsync();
 
-await DemonstrateComplexTypesWithTableSplitting();
-await DemonstrateComplexTypesWithJson();
-await DemonstrateStructComplexTypes();
+//await DemonstrateComplexTypesWithTableSplitting();
+//await DemonstrateComplexTypesWithJson();
+//await DemonstrateStructComplexTypes();
 await DemonstrateParameterizedCollectionTranslation();
 
 Console.WriteLine("\n=== Demonstration Complete ===");
@@ -229,11 +229,12 @@ async Task DemonstrateParameterizedCollectionTranslation()
 
     Console.WriteLine($"Searching for people with IDs: [{string.Join(", ", targetIds)}]");
 
+
     var peopleInCollection = await context.People
         .Where(p => targetIds.Contains(p.Id))
         .Select(p => new { p.Id, p.FirstName, p.LastName, p.Address!.City })
         .ToListAsync();
-
+    //var peopleInCollection = await context.People.Where(b => EF.MultipleParameters(targetIds).Contains(b.Id)).ToListAsync();
     Console.WriteLine("Results from parameterized collection query:");
     foreach (var person in peopleInCollection)
     {

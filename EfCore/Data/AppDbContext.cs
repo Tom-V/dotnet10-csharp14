@@ -12,8 +12,9 @@ public class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+
         // Use SQL Server with in-memory database for demonstration
-        optionsBuilder.UseSqlServer("Server=.;Database=EfCore10Demo;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true;", options => options.UseParameterizedCollectionMode(ParameterTranslationMode.Constant));
+        optionsBuilder.UseSqlServer("Server=.;Database=EfCore10Demo;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true;", options => options.UseParameterizedCollectionMode(ParameterTranslationMode.MultipleParameters));
         // Enable sensitive data logging for development
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.LogTo(Console.WriteLine);
