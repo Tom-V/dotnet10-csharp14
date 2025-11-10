@@ -18,8 +18,8 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
-    .AddInteractiveWebAssemblyComponents();
-//.RegisterPersistentService<CustomUserService>(RenderMode.InteractiveServer); // Removed InteractiveWebAssemblyComponents (no WASM project present)
+    .AddInteractiveWebAssemblyComponents()
+.RegisterPersistentService<CustomUserService>(RenderMode.InteractiveServer); // Removed InteractiveWebAssemblyComponents (no WASM project present)
 builder.Services.AddValidation();         // .AddInteractiveWebAssemblyComponents(); // Removed to avoid404 _framework/dotnet.js
 var app = builder.Build();
 
@@ -92,15 +92,15 @@ public record UserRegistration(
     [Required]
     [StringLength(50, MinimumLength = 2)]
     string Name,
-    
+
     [Required]
     [EmailAddress]
     string Email,
-    
+
     [Required]
   [Range(18, 120)]
     int Age,
-    
+
     [Required]
     [StringLength(20, MinimumLength = 6)]
     string Username);
