@@ -1,6 +1,7 @@
 <Solution>
   <Project Path="benchmarks/benchmarks.csproj" />
   <Project Path="csharp14/csharp14.csproj" />
+  <Project Path="dotnet10/dotnet10.csproj" Id="1c06d7bd-190e-471a-ac2e-01f391ff4e2f" />
   <Project Path="dotnetfeatures\dotnetfeatures.csproj" />
   <Project Path="EfCore/EfCore.csproj" Id="bc012fb2-1604-4986-bba3-134c5ce918fe" />
   <Project Path="PasskeyExample/PasskeyExample.csproj" Id="69ff2312-f434-4e27-8110-8237e4cf19b0" />
