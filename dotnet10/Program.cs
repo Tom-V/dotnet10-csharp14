@@ -1,6 +1,6 @@
 ﻿
 //GlobalizationSorting.Execute();
-//SerializationDisallowDuplicateJsonProperties.Execute();
+SerializationDisallowDuplicateJsonProperties.Execute();
 //SerializationStrictJsonSerializationOptions.Execute();
 //await ZipAsync.ExecuteAsync();
 //UriBreaking.Execute();

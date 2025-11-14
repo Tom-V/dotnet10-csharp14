@@ -1,7 +1,7 @@
 ﻿// dotnet run -c Release -f net9.0 --filter "*" --runtimes net9.0 net10.0
 
-//using BenchmarkDotNet.Attributes;
-//using BenchmarkDotNet.Running;
+using benchmarkdotnet.attributes;
+using benchmarkdotnet.running;
 
 //BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
 
@@ -35,28 +35,28 @@
 
 //BenchmarkSwitcher.FromAssembly(typeof(Tests).Assembly).Run(args);
 
-//[MemoryDiagnoser(displayGenColumns: false)]
-//[HideColumns("Job", "Error", "StdDev", "Median", "RatioSD")]
-//public partial class Tests
-//{
-//    [Benchmark]
-//    public void Test()
-//    {
-//        Process(new string[] { "a", "b", "c" });
+[MemoryDiagnoser(displayGenColumns: false)]
+[HideColumns("Job", "Error", "StdDev", "Median", "RatioSD")]
+public partial class Tests
+{
+    [Benchmark]
+    public void Test()
+    {
+        Process(new string[] { "a", "b", "c" });
 
-//        static void Process(string[] inputs)
-//        {
-//            foreach (string input in inputs)
-//            {
-//                Use(input);
-//            }
+        static void Process(string[] inputs)
+        {
+            foreach (string input in inputs)
+            {
+                Use(input);
+            }
 
-//            [MethodImpl(MethodImplOptions.NoInlining)]
-//            static void Use(string input)
-//            { }
-//        }
-//    }
-//}
+            [MethodImpl(MethodImplOptions.NoInlining)]
+            static void Use(string input)
+            { }
+        }
+    }
+}
 
 
 

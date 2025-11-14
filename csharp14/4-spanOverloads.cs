@@ -8,7 +8,7 @@
 
         var x2 = new long[] { 1 };
         var y2 = new long[] { 2 };
-        Assert.AreEqual(y2, [2]);
+        Assert.AreEqual(y2.AsSpan(), [2]);
         Assert.AreEqual(x2, y2);
     }
 
@@ -22,7 +22,7 @@
     static class Assert
     {
         public static bool AreEqual<T>(T a, T b) => default;
-        //public static bool AreEqual<T>(Span<T> a, Span<T> b) => default;
+        public static bool AreEqual<T>(Span<T> a, Span<T> b) => default;
         //public static bool AreEqual<T>(ReadOnlySpan<T> a, ReadOnlySpan<T> b) => default;
     }
 

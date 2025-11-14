@@ -1,6 +1,7 @@
 ﻿@page "/weather"
 @rendermode InteractiveServer
 @inject CustomUserService UserService
+@inject PersistentComponentState ApplicationState
 
 <PageTitle>Weather</PageTitle>
 
@@ -48,22 +49,42 @@ else
 }
 
 @code {
+    private PersistingComponentStateSubscription persistingSubscription;
+
     // Demonstrates component-level persistent state. After prerender or circuit reconnect, the last snapshot is restored.
     // AllowUpdates enables persisting updated values during interactive rendering.
     // [PersistentState(AllowUpdates = true)]
     // [PersistentState(RestoreBehavior =RestoreBehavior.SkipInitialValue)]
     //    [PersistentState(RestoreBehavior = RestoreBehavior.SkipLastSnapshot)]
 
-    // [PersistentState]
+    [PersistentState]
 
     public WeatherForecast[]? Forecasts { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        DateOnly startDate;
+        string[] summaries;
+        if (!ApplicationState.TryTakeFromJson<WeatherForecast[]>(
+            nameof(Forecasts), out var restoredWeather))
+        {
+            startDate = DateOnly.FromDateTime(DateTime.Now);
+            summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+            await Task.Delay(600);
+            Forecasts ??= Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = startDate.AddDays(index),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = summaries[Random.Shared.Next(summaries.Length)]
+            }).ToArray();
+        }
+        else
+        {
+            Forecasts = restoredWeather!;
+        }
 
-
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+        startDate = DateOnly.FromDateTime(DateTime.Now);
+        summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
         await Task.Delay(600);
         Forecasts ??= Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {

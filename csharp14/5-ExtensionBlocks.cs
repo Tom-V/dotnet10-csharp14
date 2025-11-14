@@ -10,7 +10,7 @@ internal class ExtensionBlocks
     }
 }
 
-public static class UserExtenions
+public static class UserExtension
 {
     // Extension block
     extension(ClaimsPrincipal user) // extension members for IEnumerable<TSource>
@@ -20,6 +20,9 @@ public static class UserExtenions
 
         // Extension method:
         public bool IsInRole(string role) => user.HasClaim(ClaimTypes.Role, role);
+        public bool IsInRole2(string role) => user.HasClaim(ClaimTypes.Role, role);
+        public bool IsInRole3(string role) => user.HasClaim(ClaimTypes.Role, role);
+        public bool IsInRole4(string role) => user.HasClaim(ClaimTypes.Role, role);
     }
 
     // Extension block with generic type parameter
